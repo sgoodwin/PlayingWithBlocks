@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <dispatch/dispatch.h>
 #import "MapReduce.h"
 
 int main (int argc, const char * argv[]) {
@@ -36,6 +37,17 @@ int main (int argc, const char * argv[]) {
 	NSNumber *numResult = [MapReduce reduceNumArray:nums withBlock:findMax];
 	NSArray *arrayResult = [MapReduce mapString:strings withBlock:addExclamationMark];
 	NSLog(@"Should be done now...\n %i, %@, %@, %@", result, stringResult, numResult, arrayResult);
+	
+	
+	// Modying arrays with GCD!
+	VoidBlock addStuff = ^(NSMutableArray *array, NSString *addition){ [array addObject:addition]; };
+	NSMutableArray *startArray = [NSMutableArray array];
+	dispatch_queue_t queue = dispatch_get_global_queue(0,0);
+	dispatch_async(queue, ^{addStuff(startArray, @"hi");});
+	dispatch_sync(queue, ^{addStuff(startArray, @"ho");});
+	NSLog(@"Array is now: %@", startArray);
+	sleep(10);
+	NSLog(@"Array is now: %@", startArray);
     [pool drain];
     return 0;
 }

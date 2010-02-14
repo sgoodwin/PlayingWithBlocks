@@ -11,6 +11,7 @@
 typedef NSString *(^StringBlock)();
 typedef NSNumber *(^NumBlock)();
 typedef int(^IntBlock)();
+typedef void(^VoidBlock)();
 
 @interface MapReduce : NSObject {
 
